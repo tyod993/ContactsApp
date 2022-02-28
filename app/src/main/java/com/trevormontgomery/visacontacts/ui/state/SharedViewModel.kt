@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 
 class SharedViewModel : ViewModel(), ContactsListActionHandler {
 
+    //If this app was bigger this should not happen here. But to avoid over engineering, this is here.
     private val contactsListInteractor = ContactsListInteractor(MockDataSource())
     private val pendingActions = MutableSharedFlow<ContactsListAction>()
 
@@ -105,8 +106,4 @@ class SharedViewModel : ViewModel(), ContactsListActionHandler {
     private fun updateContactsList(){
         contactsList.value = contactsListInteractor.getAllContacts()
     }
-
-
-
-
 }
