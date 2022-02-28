@@ -8,11 +8,12 @@ import com.trevormontgomery.visacontacts.data.ContactsListInteractor
 import com.trevormontgomery.visacontacts.data.MockDataSource
 import com.trevormontgomery.visacontacts.entities.Contact
 import com.trevormontgomery.visacontacts.ui.screens.ContactsListAction
+import com.trevormontgomery.visacontacts.ui.screens.ContactsListActionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class SharedViewModel : ViewModel() {
+class SharedViewModel : ViewModel(), ContactsListActionHandler {
 
     private val contactsListInteractor = ContactsListInteractor(MockDataSource())
     private val pendingActions = MutableSharedFlow<ContactsListAction>()
@@ -28,6 +29,14 @@ class SharedViewModel : ViewModel() {
     init {
         updateContactsList()
         setupActionHandler()
+    }
+
+    //TODO: Too much of the UI depends directly on this function. The depenency should change to
+    // the abstract class this ViewModel implements.
+    override fun submitAction(action : ContactsListAction){
+        viewModelScope.launch {
+            pendingActions.emit(action)
+        }
     }
 
     private fun setupActionHandler(){
@@ -97,10 +106,7 @@ class SharedViewModel : ViewModel() {
         contactsList.value = contactsListInteractor.getAllContacts()
     }
 
-    fun submitAction(action : ContactsListAction){
-        viewModelScope.launch {
-            pendingActions.emit(action)
-        }
-    }
+
+
 
 }

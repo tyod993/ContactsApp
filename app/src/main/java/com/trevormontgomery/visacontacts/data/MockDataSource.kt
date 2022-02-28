@@ -5,7 +5,8 @@ import com.trevormontgomery.visacontacts.entities.Contact
 class MockDataSource :
     ContactManagementCapabilities{
 
-    private var data = mutableMapOf( 1 to Contact(
+    private var data = mutableMapOf(
+        1 to Contact(
         1,
         "Trevor",
         "Montgomery",
